@@ -1,7 +1,7 @@
 // In this file we implement the comment list component
 
-import { useEffect, useState } from 'react';
-import { getComments as getCommentsApi } from '../db/api';
+import {useEffect, useState} from 'react';
+import {getComments as getCommentsApi} from '../db/api';
 import Comment from './Comment';
 
 /**
@@ -18,6 +18,18 @@ function CommentList({currentUserId}) {
         (backendComment) => backendComment.parentId === null
     );
 
+    // Reply have a parrent id value different from null 
+    const getReplies = commentId => {
+        return backendComments.filter(
+            backendComment => backendComment.parentId === commentId
+        ).sort(
+            (a, b) => (
+                new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+            )
+        );
+    }
+
+    // Logging
     console.log('backendComments', backendComments);
 
     // We use useEffect because, we want to fetch data as an effect
@@ -33,7 +45,12 @@ function CommentList({currentUserId}) {
             <div className="list-title">Comments</div>
             <div className="list-container">
                 {rootComments.map((rootComment) => (
-                    <Comment key={rootComment.id} comment={rootComment}/> // It needs an unique key
+                    // Look into lazy loading
+                    <Comment 
+                        key={rootComment.id} 
+                        comment={rootComment} 
+                        replies={getReplies(rootComment.id)} 
+                    /> // It needs an unique key
                 ))}
             </div>
         </div>
