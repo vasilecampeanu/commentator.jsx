@@ -1,6 +1,8 @@
-// Fetch comments
+// In this file we implement the comment list component
+
 import { useEffect, useState } from 'react';
 import { getComments as getCommentsApi } from '../db/api';
+import Comment from './Comment';
 
 /**
  * Gets the current id from App.js
@@ -18,7 +20,7 @@ function CommentList({currentUserId}) {
 
     console.log('backendComments', backendComments);
 
-    // We use useEffect because, we want to fetch data
+    // We use useEffect because, we want to fetch data as an effect
     useEffect(() => {
         getCommentsApi().then((data) => {
             setBackendComments(data);
@@ -31,7 +33,7 @@ function CommentList({currentUserId}) {
             <div className="list-title">Comments</div>
             <div className="list-container">
                 {rootComments.map((rootComment) => (
-                    <div key={rootComment.id}>{rootComment.body}</div> // We should have a unique key
+                    <Comment key={rootComment.id} comment={rootComment}/> // It needs an unique key
                 ))}
             </div>
         </div>
