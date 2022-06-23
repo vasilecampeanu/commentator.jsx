@@ -65,8 +65,10 @@ function CommentList({currentUserId}) {
     return (
         <div className="comment-list">
             <div className="comment-list-title">Comments</div>
-            <div className="comment-form-title">Write comment</div>
-            <CommentForm submitLabel="Write" handleSubmit={addComment}/>
+            <div className="content-composer-container">
+                <div className="comment-form-title">Write a comment</div>
+                <CommentForm submitLabel="Write" handleSubmit={addComment}/>
+            </div>
             <div className="comment-list-container">
                 {rootComments.map((rootComment) => (
                     // Look into lazy loading

@@ -6,15 +6,16 @@
  * @returns 
  */
 function Comment({comment, replies, currentUserId, deleteComment}) {
-    const tenMinutes = 30000;
+    const tenMinutes = 60000;
     const timePassed = new Date() - new Date(comment.createdAt) > tenMinutes;
     const canReply = Boolean(currentUserId);
     const canEdit = currentUserId === comment.userId && !timePassed;
     const canDelete = currentUserId === comment.userId;
     const createdAt = new Date(comment.createdAt).toLocaleDateString();
+
     return (
         <div className="comment">
-            <div className="comment-root">
+            <div className="comment-container">
                 <div className="comment-header">
                     <div className="comment-user-info">
                         <div className="comment-user-image-svg">
@@ -36,7 +37,7 @@ function Comment({comment, replies, currentUserId, deleteComment}) {
                 </div>
             </div>
             {replies.length > 0 && (
-                <div className="comment-root-replys">
+                <div className="comment-replys">
                     <div className="comment-replies-list">
                         {replies.map(reply => (
                             <Comment 
