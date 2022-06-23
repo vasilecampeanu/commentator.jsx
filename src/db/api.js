@@ -1,3 +1,45 @@
+import db from './firebase.config';
+import {
+    collection,
+    collectionGroup,
+    getDocs, 
+    addDoc,
+    query, setDoc
+} from 'firebase/firestore';
+
+// -------- DB Testing --------
+
+// Reference collection ornary
+// const collectionReference = collection(db, 'comments');
+
+// // Fetching data
+// getDocs(collectionReference).then((snapshot) => {
+//     // console.log(snapshot.docs);
+//     const comments = [];
+
+//     snapshot.docs.forEach((doc) => {
+//         comments.push({ ...doc.data(), id: doc.id });
+//     });
+    
+//     console.log(comments);
+// }).catch(err => {
+//     console.log(err.message)
+// });
+
+// Reference collection group
+const collectionGroupReference = collectionGroup(db, 'comments');
+
+// https://stackoverflow.com/questions/46515764/how-can-i-use-async-await-at-the-top-level
+(async () => {
+    const comments = query(collectionGroup(db, 'comments'));
+    const querySnapshot = await getDocs(comments);
+    querySnapshot.forEach((doc) => {
+        console.log(doc.id, " => ", doc.data());
+    });
+})();
+
+// -------- DB Testing --------
+
 export const getComments = async () => {
     return [
         {
@@ -35,7 +77,37 @@ export const getComments = async () => {
     ];
 };
 
+// Adding data
+// const addBookForm = document.querySelector('.add')
+// addBookForm.addEventListener('submit', (e) => {
+//     e.preventDefault()
+
+//     addDoc(collectionReference, {
+//         body: "This is just a regullar tess!",
+//         author: "Tester",
+//     })
+//     .then(() => {
+//         addBookForm.reset()
+//     })
+// })
+
 export const createComment = async (text, parentId = null) => {
+    console.log("Commend added");
+
+    // addDoc(collectionReference, {
+    //     author: "Johnny Test",
+    //     body: text
+    // })
+
+    const subColRef = collection(db, "posts", "gtnxkrz3fuUoOnynDkrF", "comments");
+
+    addDoc(subColRef, {
+        author: "Johnny Test",
+        body: text
+    })
+
+    // console.log(Math.random().toString(36).substr(2, 9));
+
     return {
         id: Math.random().toString(36).substr(2, 9),
         body: text,

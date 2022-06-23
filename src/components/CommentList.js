@@ -31,7 +31,7 @@ function CommentList({currentUserId}) {
     }
 
     // Logging
-    console.log('backendComments', backendComments);
+    // console.log('backendComments', backendComments);
 
     // Add comment
     const addComment = (text, parentId) => {

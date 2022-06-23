@@ -75,3 +75,12 @@ Install scss in your project.
 ```
 npm install --save-dev node-sass
 ```
+
+### Set firebase CORS
+https://firebase.google.com/docs/storage/web/download-files#cors_configuration
+
+### List bucket names from a project
+```bash
+gsutil ls -p tests-2d9af
+gsutil cors set cors.json gs://staging.tests-2d9af.appspot.com/
+```

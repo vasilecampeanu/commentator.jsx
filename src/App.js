@@ -1,5 +1,10 @@
 // Thi file contains the main function
 import CommentList from './components/CommentList';
+import db from './db/firebase.config';
+import { useEffect } from 'react';
+import {
+    collection, getDocs
+} from 'firebase/firestore';
 
 /**
  * Commentator's main function
