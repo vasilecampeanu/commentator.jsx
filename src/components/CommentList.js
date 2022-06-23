@@ -1,8 +1,9 @@
 // In this file we implement the comment list component
 
 import {useEffect, useState} from 'react';
-import {getComments as getCommentsApi} from '../db/api';
+import {getComments as getCommentsApi, createComment as createCommentApi} from '../db/api';
 import Comment from './Comment';
+import CommentForm from './CommentForm';
 
 /**
  * Gets the current id from App.js
@@ -32,17 +33,28 @@ function CommentList({currentUserId}) {
     // Logging
     console.log('backendComments', backendComments);
 
+    // Add comment
+    const addComment = (text, parentId) => {
+        console.log("addComment", text, parentId);
+        createCommentApi(text, parentId).then(comment => {
+            // We set the new comment at the beginning
+            setBackendComments([comment, ...backendComments]) // Update backend comments
+        })
+    }
+
     // We use useEffect because, we want to fetch data as an effect
     useEffect(() => {
         getCommentsApi().then((data) => {
             setBackendComments(data);
         }); // The api is returning a promise
     }, []); // We pass empty array this means that will be trigered only once after monting the compionent
-
+    
     // Return a comment list
     return (
         <div className="comment-list">
             <div className="list-title">Comments</div>
+            <div className="comment-form-title">Write comment</div>
+            <CommentForm submitLabel="Write" handleSubmit={addComment}/>
             <div className="list-container">
                 {rootComments.map((rootComment) => (
                     // Look into lazy loading
