@@ -1,7 +1,7 @@
 // In this file we implement the comment list component
 
 import {useEffect, useState} from 'react';
-import {getComments as getCommentsApi, createComment as createCommentApi} from '../db/api';
+import {getComments as getCommentsApi, createComment as createCommentApi, deleteComment as deleteCommentApi} from '../db/api';
 import Comment from './Comment';
 import CommentForm from './CommentForm';
 
@@ -42,6 +42,18 @@ function CommentList({currentUserId}) {
         })
     }
 
+    // Delete Comments
+    const deleteComment = (commentId) => {
+        if (window.confirm('Are you sure you want to delete this comment?')) {
+            deleteCommentApi(commentId).then(() => {
+                const updateBackendComments = backendComments.filter(
+                    (backendComment) => backendComment.id !== commentId
+                );
+                setBackendComments(updateBackendComments);
+            });
+        }
+    }
+
     // We use useEffect because, we want to fetch data as an effect
     useEffect(() => {
         getCommentsApi().then((data) => {
@@ -52,16 +64,18 @@ function CommentList({currentUserId}) {
     // Return a comment list
     return (
         <div className="comment-list">
-            <div className="list-title">Comments</div>
+            <div className="comment-list-title">Comments</div>
             <div className="comment-form-title">Write comment</div>
             <CommentForm submitLabel="Write" handleSubmit={addComment}/>
-            <div className="list-container">
+            <div className="comment-list-container">
                 {rootComments.map((rootComment) => (
                     // Look into lazy loading
                     <Comment 
                         key={rootComment.id} 
                         comment={rootComment} 
                         replies={getReplies(rootComment.id)} 
+                        currentUserId={currentUserId}
+                        deleteComment={deleteComment}
                     /> // It needs an unique key
                 ))}
             </div>

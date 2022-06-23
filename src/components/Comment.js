@@ -1,4 +1,17 @@
-function Comment({comment, replies}) {
+/**
+ * 
+ * @param {*} param0 
+ * @param {*} param0 
+ * @param {*} param0 
+ * @returns 
+ */
+function Comment({comment, replies, currentUserId, deleteComment}) {
+    const tenMinutes = 30000;
+    const timePassed = new Date() - new Date(comment.createdAt) > tenMinutes;
+    const canReply = Boolean(currentUserId);
+    const canEdit = currentUserId === comment.userId && !timePassed;
+    const canDelete = currentUserId === comment.userId;
+    const createdAt = new Date(comment.createdAt).toLocaleDateString();
     return (
         <div className="comment">
             <div className="comment-root">
@@ -10,17 +23,28 @@ function Comment({comment, replies}) {
                         <div className="comment-author">{comment.username}</div>
                     </div>
                     <div className="comment-info-date">
-                        {comment.createdAt}
+                        {createdAt}
                     </div>
                 </div>
                 <div className="comment-content">{comment.body}</div>
-                <div className="comment-footer"></div>
+                <div className="comment-footer">
+                    <div className="comment-actions">
+                        {canReply && <div className="comment-action-button">Reply</div>}
+                        {canEdit && <div className="comment-action-button">Edit</div>}
+                        {canDelete && <div className="comment-action-button" onClick={() => deleteComment(comment.id)}>Delete</div>}
+                    </div>
+                </div>
             </div>
             {replies.length > 0 && (
-                <div className="comment-replys">
-                    <div className="replies-list">
+                <div className="comment-root-replys">
+                    <div className="comment-replies-list">
                         {replies.map(reply => (
-                            <Comment comment={reply} key={reply.id} replies={[]}/>
+                            <Comment 
+                                comment={reply} key={reply.id} 
+                                replies={[]} 
+                                currentUserId={currentUserId}
+                                deleteComment={deleteComment}
+                            />
                         ))}
                     </div>
                 </div>
